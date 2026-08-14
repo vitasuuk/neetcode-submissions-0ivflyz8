@@ -1,0 +1,40 @@
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+// Two Pass
+class Solution {
+    public Node copyRandomList(Node head) {
+        Map<Node, Node> oldToCopy = new HashMap<>();
+        oldToCopy.put(null, null);
+
+        // Populate Map
+        Node curr = head;
+        while(curr != null) {
+            Node copy = new Node(curr.val);
+            oldToCopy.put(curr, copy);
+            curr = curr.next;
+        }
+
+        // Link the copied Nodes
+        curr = head;
+        while(curr != null) {
+            Node toAdd = oldToCopy.get(curr);
+            toAdd.next = oldToCopy.get(curr.next);
+            toAdd.random = oldToCopy.get(curr.random);
+            curr = curr.next;
+        }
+
+        return oldToCopy.get(head);
+    }
+}
